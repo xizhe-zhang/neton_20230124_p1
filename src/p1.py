@@ -1,29 +1,65 @@
-# Python3 program to demonstrate
+######################################################################################################
+# デモ用の Python3 プログラム
+######################################################################################################
 import itertools
 import pandas as pd
+import sys
 
 
+######################################################################################################
+# CSV ファイルから入力データを取得する
+# weight[i],value[i]は整数
+######################################################################################################
 def getInputFromFile():
-    df = pd.read_csv('test.csv', sep=',')
-    value_dict = {}
-    value_dict['W'] = int(df['value'].iloc[0])
-    df_value = df.iloc[1:, :]
-    value_dict['Id_list'] = df_value.iloc[:, 0].astype(int).tolist()
-    value_dict['Wight_list'] = df_value.iloc[:, 1].astype(int).tolist()
-    value_dict['Value_list'] = df_value.iloc[:, 2].astype(int).tolist()
+    try:
+        df = pd.read_csv('test.csv', sep=',')
+        value_dict = {}
+        value_dict['W'] = int(df['value'].iloc[0])
+        df_value = df.iloc[1:, :]
+        value_dict['Id_list'] = df_value.iloc[:, 0].astype(int).tolist()
+        value_dict['Wight_list'] = df_value.iloc[:, 1].astype(int).tolist()
+        value_dict['Value_list'] = df_value.iloc[:, 2].astype(int).tolist()
+    except:
+        # エラーでプログラムを終了します
+        sys.exit("Read CSV file error!")
     return value_dict
 
 
+######################################################################################################
+# 制約をチェック
+# ・1 < n <= 100
+# ・1 <= weight[i],value[i] <= 1000
+# ・1 <= W <= 10000
+######################################################################################################
 def checkInput(value_dict):
     if value_dict['W'] <= 0 or value_dict['W'] > 10000:
         print(F"Error input value[W={value_dict['W']}]!")
         return False
-    print("Check input OK.")
+    if len(value_dict['Wight_list']) <= 0 or len(value_dict['Wight_list']) > 100:
+        print(F"Error Wight_list length[len={len(value_dict['Wight_list'])}]!")
+        return False
+    if len(value_dict['Value_list']) <= 0 or len(value_dict['Value_list']) > 100:
+        print(F"Error Value_list length[len={len(value_dict['Value_list'])}]!")
+        return False
+    if len(value_dict['Value_list']) != len(value_dict['Wight_list']):
+        print(
+            F"Error length not equal[Value_list={len(value_dict['Value_list'])}] [Wight_list={len(value_dict['Wight_list'])}]!")
+        return False
+    for value in value_dict['Wight_list']:
+        if value <= 0 or value > 10000:
+            print(F"Error input Wight_list value[W={value}]!")
+            return False
+    for value in value_dict['Value_list']:
+        if value <= 0 or value > 10000:
+            print(F"Error input Value_list value[W={value}]!")
+            return False
     return True
 
 
+######################################################################################################
+# 総重量と比較して有効なデータを取得する
+######################################################################################################
 def getValidValue(value_dict):
-    print("Get valid Wight.")
     value_dict['Id_valid_list'] = []
     for index in value_dict['Id_list']:
         if value_dict['Wight_list'][index] <= value_dict['W']:
@@ -31,8 +67,10 @@ def getValidValue(value_dict):
     return value_dict
 
 
+######################################################################################################
+# 品物のすべての組み合わせを取得する
+######################################################################################################
 def getAllCombinations(list):
-    print("Get all combinations.")
     combination_list = []
     for L in range(len(list) + 1):
         for subset in itertools.combinations(list, L):
@@ -41,6 +79,9 @@ def getAllCombinations(list):
     return combination_list
 
 
+######################################################################################################
+# 品物組み合わせの重みを計算する
+######################################################################################################
 def getCalculatedWeight(list, value_dict):
     value_list = []
     for data in list:
@@ -51,6 +92,9 @@ def getCalculatedWeight(list, value_dict):
     return value_list
 
 
+######################################################################################################
+# 総重量と比較して有効な品物組み合を取得する
+######################################################################################################
 def getValidCombination(list, weight_list, value_dict):
     value_dict['valid_combination_list'] = []
     value_dict['valid_combination_value'] = []
@@ -64,6 +108,9 @@ def getValidCombination(list, weight_list, value_dict):
     return value_dict
 
 
+###################################################
+# 最大重量の組み合わせを取得する
+###################################################
 def getMaxCombination(value_dict, max_value):
     value_dict['max_combination_list'] = []
     for idx, value in enumerate(value_dict['valid_combination_value']):
@@ -73,6 +120,10 @@ def getMaxCombination(value_dict, max_value):
     return value_dict
 
 
+######################################################################################################
+# n個の品物があり、i番目の品物のそれぞれ重さと価値が weight[i],value[i]となっている (i=0,1,...,n−1)。
+# これらの品物から重さの総和がWを超えないように選んだときの、価値の総和の最大値を求めよ。
+######################################################################################################
 def getMaxValueFromInput(value_dict):
     if not checkInput(value_dict):
         value_dict['max_combination_list'] = []
@@ -96,14 +147,17 @@ def getMaxValueFromInput(value_dict):
     return value_dict['max_combination_list']
 
 
+######################################################################################################
+# 最初の関数
+######################################################################################################
 def main():
     value_dict = getInputFromFile()
     max_combination_list = getMaxValueFromInput(value_dict)
-    print(value_dict)
+    # print(value_dict) ## デバッグ用
     if max_combination_list != []:
-        print(F"Max_value = {value_dict['max_value']}")
+        print(F"価値の総和の最大値 = {value_dict['max_value']}")
     else:
-        print("No result!")
+        print("検索結果はありません!")
 
 
 if __name__ == "__main__":
