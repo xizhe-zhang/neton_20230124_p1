@@ -14,6 +14,7 @@ Package         Version
 --------------- --------
 attrs           22.2.0
 autopep8        2.0.1
+coverage        7.1.0
 exceptiongroup  1.1.0
 iniconfig       2.0.0
 numpy           1.24.1
@@ -23,6 +24,7 @@ pip             22.3.1
 pluggy          1.0.0
 pycodestyle     2.10.0
 pytest          7.2.1
+pytest-cov      4.0.0
 python-dateutil 2.8.2
 pytz            2022.7.1
 setuptools      65.6.3
@@ -54,4 +56,44 @@ W,,8
 0,10,100
 1,5,20
 2,7,6
+```
+
+---Pytest---
+```
+export PYTHONPATH=**pathOfRepo**/neton_20230124_p1/src
+cd test
+pytest
+```
+
+---sample result---
+```
+====================================================== test session starts ======================================================
+platform darwin -- Python 3.10.9, pytest-7.2.1, pluggy-1.0.0
+rootdir: neton_20230124_p1/test
+plugins: cov-4.0.0
+collected 13 items                                                                                                              
+
+test_p1.py::test_case001_1 PASSED                                                                                         [  7%]
+test_p1.py::test_case001_2 PASSED                                                                                         [ 15%]
+test_p1.py::test_case002_1 PASSED                                                                                         [ 23%]
+test_p1.py::test_case002_2 PASSED                                                                                         [ 30%]
+test_p1.py::test_case002_3 PASSED                                                                                         [ 38%]
+test_p1.py::test_case002_4 PASSED                                                                                         [ 46%]
+test_p1.py::test_case002_5 PASSED                                                                                         [ 53%]
+test_p1.py::test_case002_6 PASSED                                                                                         [ 61%]
+test_p1.py::test_case002_7 PASSED                                                                                         [ 69%]
+test_p1.py::test_case003_1 PASSED                                                                                         [ 76%]
+test_p1.py::test_case003_2 PASSED                                                                                         [ 84%]
+test_p1.py::test_case003_3 PASSED                                                                                         [ 92%]
+test_p1.py::test_case003_4 PASSED                                                                                         [100%]
+
+---------- coverage: platform darwin, python 3.10.9-final-0 ----------
+Name                                                        Stmts   Miss Branch BrPart  Cover
+---------------------------------------------------------------------------------------------
+/Users/sdlontry/Project/repo3/neton_20230124_p1/src/p1.py      97      0     44      0   100%
+---------------------------------------------------------------------------------------------
+TOTAL                                                          97      0     44      0   100%
+
+
+====================================================== 13 passed in 0.92s =======================================================
 ```
