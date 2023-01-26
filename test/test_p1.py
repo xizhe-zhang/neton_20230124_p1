@@ -1,4 +1,5 @@
 import p1
+import itertools
 
 
 def test_case001_1():
@@ -109,3 +110,72 @@ def test_case003_4():
     value_dict['Wight_list'] = [10, 5, 7]
     value_dict['Value_list'] = [100, 20, 6]
     assert p1.getMaxValueFromInput(value_dict) == []
+
+
+def getMaxValue(value_dict):
+    list = value_dict['Id_list']
+    combination_list = []
+    for L in range(len(list) + 1):
+        for subset in itertools.combinations(list, L):
+            if len(subset) > 0:
+                combination_list.append(subset)
+    max_value = 0
+    for data in combination_list:
+        sum = 0
+        total = 0
+        for value in data:
+            sum = sum + value_dict['Wight_list'][value]
+            total = total + value_dict['Value_list'][value]
+        if sum <= value_dict['W']:
+            if total > max_value:
+                max_value = total
+    return max_value
+
+
+def test_case004_bulk_test():
+    value_dict = {}
+    for w in range(1, 11):
+        for w1 in range(1, 11):
+            for w2 in range(1, 11):
+                for w3 in range(1, 11):
+                    for v1 in range(1, 11):
+                        for v2 in range(1, 11):
+                            for v3 in range(1, 11):
+                                value_dict['W'] = w
+                                value_dict['Id_list'] = [0, 1, 2]
+                                value_dict['Wight_list'] = [w1, w2, w3]
+                                value_dict['Value_list'] = [v1, v2, v3]
+                                max_value = getMaxValue(value_dict)
+                                max_combination_list = p1.getMaxValueFromInput(
+                                    value_dict)
+                                if max_value <= 0:
+                                    assert max_combination_list == []
+                                else:
+                                    print(value_dict)
+                                    assert value_dict['max_value'] == max_value
+
+
+def test_case005_bulk_test():
+    value_dict = {}
+    for w in range(200, 211):
+        for w1 in range(100, 105):
+            for w2 in range(100, 105):
+                for w3 in range(100, 105):
+                    for v1 in range(100, 105):
+                        for v2 in range(100, 105):
+                            for v3 in range(100, 105):
+                                value_dict['W'] = w
+                                value_dict['Id_list'] = [
+                                    0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                                value_dict['Wight_list'] = [
+                                    w1, w2, w3, w1+1, w2+1, w3+1, w1+2, w2+2, w3+2, w1+3]
+                                value_dict['Value_list'] = [
+                                    v1, v2, v3, v1+1, v2+1, v3+1, v1+2, v2+2, v3+2, v1+3]
+                                max_value = getMaxValue(value_dict)
+                                max_combination_list = p1.getMaxValueFromInput(
+                                    value_dict)
+                                if max_value <= 0:
+                                    assert max_combination_list == []
+                                else:
+                                    print(value_dict)
+                                    assert value_dict['max_value'] == max_value
